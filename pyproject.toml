@@ -3,10 +3,13 @@ name = "langchain-course"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "black>=24.8.0",
     "isort>=5.13.2",
     "langchain>=0.0.27",
+    "langchain-core>=0.3.0",
+    "langchain-ollama>=0.3.10",
+    "langchain-openai>=0.3.35",
     "python-dotenv>=1.0.1",
 ]

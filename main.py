@@ -1,12 +1,22 @@
 from dotenv import load_dotenv
+import os
+load_dotenv()
+
+from pydantic import BaseModel, Field
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_ollama import ChatOllama
-import os
+from langchain.tools import tool
+from langchain_core.messages import HumanMessage
+from langchain.agents import create_agent
+from tavily import TavilyClient
+from langchain_tavily import TavilySearch
 
-load_dotenv()
+import tavily
 
-def main():
+
+
+def template_setup():
     print("Hello from langchain-course!")
     # print(os.environ.get("OPENAI_API_KEY"))
     information = """"
@@ -29,6 +39,30 @@ def main():
     chain = summary_prompt_template | llm
     response = chain.invoke(input={"information":information})
     print(response.content)
+
+tavily=TavilyClient()
+
+@tool
+def search(query: str) -> str:
+    """
+    Tool that searches over internet
+    Args:
+        query: The query to search for
+    Returns:
+        The search results
+    """
+    print(f"**** Searching the web for {query} ****")
+    return tavily.search(query)
+
+# tools = [search]
+tools = [TavilySearch()]
+llm = ChatOpenAI()
+agent=create_agent(model=llm, tools=tools)
+
+def main():
+    print("Jai Shree Ram")
+    results = agent.invoke({"messages": [HumanMessage(content="Search for AI engineer jobs with skills in langchain in India over linkedin")]})
+    print(results)
 
 if __name__ == "__main__":
     main()
